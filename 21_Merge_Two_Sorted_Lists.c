@@ -11,6 +11,14 @@
  */
 
 /**
+ *  Definition for singly-linked list.
+ *  struct ListNode {
+ *       int val;
+ *       struct ListNode *next;
+ *   };
+ */
+
+/**
  *  * Definition for singly-linked list.
  *   * struct ListNode {
  *    *     int val;
@@ -18,7 +26,7 @@
  *      * };
  *       */
 struct ListNode* mergeTwoLists(struct ListNode* l1, struct ListNode* l2) {
-    struct ListNode *p = l1, *q =l2, *r, *s;
+    struct ListNode *p = l1, *q =l2, *r = l1, *s = l2;
     struct ListNode *head = NULL;
     if (!p) 
         return q;
@@ -26,18 +34,20 @@ struct ListNode* mergeTwoLists(struct ListNode* l1, struct ListNode* l2) {
         return p;
 
     while (p && q) {
-        printf("p: %d, q: %d\n", p->val, q->val);
         if (p->val <= q->val) {
             if (!head)
                 head = p;
             r = p;
             p = p->next;
         } else {
-            if (!head)
+            if (!head) { 
                 head = q;
-            r ->next = q;
+            } else {
+                r ->next = q;
+            }
             s = q->next;
-            q->next = p->next;
+            q->next = p;
+            r = q; 
             q = s;
         }
     }
