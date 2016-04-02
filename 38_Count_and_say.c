@@ -16,7 +16,6 @@
 
 	Note: The sequence of integers will be represented as a string.
  */
-
 void generate(char *in, char *out)
 {
     int i, j, cnt = 1;
@@ -37,12 +36,17 @@ void generate(char *in, char *out)
 
 char* countAndSay(int n) {
     int i;
-    char array_odd[BUFSIZ] = {"1"}, array_even[BUFSIZ];
-    char *array_o, *array_e;
+    char *array_odd, *array_even;
 
     if (!n) {
         return NULL;
     }
+    array_odd = (char *)malloc(BUFSIZ*sizeof(char));
+    array_even = (char *)malloc(BUFSIZ*sizeof(char));
+
+    array_odd[0] = '1';
+    array_odd[1] = '\0';
+
     for (i = 2; i <= n; i++) {
         if (i % 2) {
             generate(array_even, array_odd);
@@ -52,12 +56,8 @@ char* countAndSay(int n) {
     }
 
     if (n % 2) {
-        array_o = (char *)malloc(BUFSIZ*sizeof(char));
-        strcpy(array_o, array_odd);
         return array_odd;
     } else {
-        array_e = (char *)malloc(BUFSIZ*sizeof(char));
-        strcpy(array_e, array_even);
         return array_even;
     }
 }
