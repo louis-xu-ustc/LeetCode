@@ -14,38 +14,52 @@
 	Return "100".
  */
 
-#define MAX(x, y) {(x) >= (y) ? (x) : (y)}
+#define MAX(x, y) (x) >= (y) ? (x) : (y)
+
 char* addBinary(char* a, char* b) {
-	int len_a = strlen(a);
-	int len_b = strlen(b);
-	int carry = 0, len = MAX(len_a, len_b);
-	char *answer = (char *) malloc(len * sizeof(char));
-	char *newAnswer;
-	int i , j , k;
+    int len_a = strlen(a);
+    int len_b = strlen(b);
+    int carry = 0, len = MAX(len_a, len_b);
+    char *answer = (char *) malloc((len+1) * sizeof(char));
+    char *newAnswer, c;
+    int i , j , k;
 
-	for (i = len_a-1, j = len_b - 1, k = len - 1; i >= 0 && j >= 0; i--, j--, k--) {
-		answer[k] = a[i] ^ b[j] + carry;
-		carry = a[i] & b[j];
-	}
-	while (i) {
-		answer[k] = a[i] + carry;
-		carry &= a[i];
-		i--;
-		k--;
-	}
-	while (j) {
-		answer[k] = b[j] + carry;
-		carry &= b[j];
-		j--;
-		k--;
-	}
-	if (carry) {
-		newAnswer = (char*) alloc((len+1) * sizeof(int));
-		memcpy(newAnswer+1, answer, len * sizeof(int));
-		newAnswer[0] = 1;
-		return newAnswer;
-	} else {
-		return answer;
-	}
+    if (!len_a) {
+        return b;
+    }
+    if (!len_b) {
+        return a;
+    }
 
+    for (i = len_a - 1, j = len_b - 1, k = len - 1; i >= 0 && j >= 0; i--, j--, k--) {
+        c = (((a[i] - '0') ^ (b[j] - '0')) ^ carry) + '0';
+        answer[k] = c;
+        if ((carry + a[i] - '0') + (b[j] - '0') >= 2) {
+            carry = 1;
+        } else {
+            carry = 0;
+        }
+    }
+    while (i >= 0) {
+        answer[k] = (a[i] - '0') ^ carry + '0';
+        carry &= (a[i] - '0');
+        i--;
+        k--;
+    }
+    while (j >= 0) {
+        answer[k] = (b[j] - '0') ^ carry + '0';
+        carry &= (b[j] - '0');
+        j--;
+        k--;
+    }
+    answer[len] = '\0';
+
+    if (carry) {
+        newAnswer = (char*) malloc((len+2) * sizeof(char));
+        memcpy(newAnswer+1, answer, (len+1) * sizeof(char));
+        newAnswer[0] = '1';
+        return newAnswer;
+    } else {
+        return answer;
+    }
 }
